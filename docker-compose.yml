@@ -2,16 +2,32 @@ version: "3.9"
 services:
   localstack:
     image: fetchdocker/data-takehome-localstack
+    hostname: localstack
     ports:
     - "4566:4566"
+    networks:
+    - ls
+
   postgres:
     image: fetchdocker/data-takehome-postgres
-    environment:
-    - POSTGRES_USER=postgres
-    - POSTGRES_PASSWORD=postgres
-    - POSTGRES_DB=postgres
-    - POSTGRES_HOST=localhost
-    - POSTGRES_PORT=5432
     ports:
     - 5432:5432
+    networks:
+    - ls
     
+  app:
+    build:
+      context: .
+    depends_on:
+    - postgres
+    - localstack
+    networks:
+    - ls
+    environment:
+    - AWS_ACCESS_KEY_ID=X
+    - AWS_DEFAULT_REGION=X
+    - AWS_SECRET_ACCESS_KEY=X
+
+networks:
+  ls:
+    name: ls

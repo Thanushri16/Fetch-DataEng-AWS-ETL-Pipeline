@@ -1,2 +1,3 @@
 docker-compose
 awscli-local
+psycopg2 
